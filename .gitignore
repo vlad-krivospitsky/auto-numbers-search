@@ -10,7 +10,6 @@ venv/
 env/
 ENV/
 db.sqlite3
-db.json
 *.log
 /static/
 /media/

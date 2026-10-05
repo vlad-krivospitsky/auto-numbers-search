@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ vehicle.vendor }} {{ vehicle.model }} ({{ vehicle.license_plate }}){% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <a href="{% url 'vehicles:search' %}" class="btn btn-outline-secondary btn-sm">&larr; Назад до пошуку</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white py-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="h4 mb-0 fw-bold">{{ vehicle.vendor }} {{ vehicle.model }}</h2>
+            <div class="d-flex align-items-center gap-2">
+                {% if user.is_staff %}
+                <a href="{% url 'vehicles:update' vehicle.pk %}" class="btn btn-sm btn-outline-warning me-1"
+                    title="Редагувати">
+                    <i class="bi bi-pencil"></i>
+                </a>
+                <a href="{% url 'vehicles:delete' vehicle.pk %}" class="btn btn-sm btn-outline-danger me-1"
+                    title="Видалити">
+                    <i class="bi bi-trash"></i>
+                </a>
+                {% endif %}
+                <span class="badge bg-warning text-dark border border-dark px-3 py-2 fs-5 font-monospace">
+                    {{ vehicle.license_plate }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row g-4">
+            <div class="col-md-5">
+                <div class="text-center rounded border overflow-hidden bg-light p-2 shadow-sm">
+                    <img data-ci-make="{{ vehicle.vendor }}" data-ci-model="{{ vehicle.model }}"
+                        data-ci-year="{{ vehicle.year_from }}" src="{% static 'images/no-photo.png' %}"
+                        alt="{{ vehicle.vendor }} {{ vehicle.model }}" class="img-fluid rounded"
+                        style="max-height: 320px; object-fit: cover;">
+                </div>
+            </div>
+
+            <div class="col-md-7">
+                <table class="table table-striped table-borderless">
+                    <tbody>
+                        <tr>
+                            <th scope="row" class="text-muted w-40">Марка (Vendor):</th>
+                            <td><strong>{{ vehicle.vendor }}</strong></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-muted">Модель:</th>
+                            <td>{{ vehicle.model }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-muted">Рік випуску:</th>
+                            <td>{{ vehicle.year_from }} р.</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-muted">Регіон реєстрації:</th>
+                            <td>{{ vehicle.region.name }} (<code>{{ vehicle.region.code }}</code>)</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-muted">Тип пального:</th>
+                            <td>{{ vehicle.get_fuel_display }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-muted">Колір:</th>
+                            <td>{{ vehicle.color }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-muted">Тип кузова:</th>
+                            <td>{{ vehicle.get_body_type_display }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-muted">Дата реєстрації:</th>
+                            <td>{{ vehicle.registration_date|date:"d.m.Y" }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://carimagesapi.com/assets/js/carimages.js" data-api-key="{{ car_images_api_key }}" async></script>
+{% endblock %}

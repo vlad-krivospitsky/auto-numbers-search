@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Пошук авто за держ. номером{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{% url 'vehicles:search' %}">
+        <img src="{% static 'images/logo.svg' %}" alt="Logo" height="60" class="d-inline-block">
+        <span>AUTO NUMBERS SEARCH</span>
+      </a>
+
+      <div class="d-flex align-items-center">
+        {% if user.is_authenticated %}
+        <span class="navbar-text me-3">
+          Вітаємо, <strong>{{ user.username }}</strong>
+          {% if user.is_staff %}<span class="badge bg-warning text-dark ms-1">Адмін</span>{% endif %}
+        </span>
+
+        <form action="{% url 'accounts:logout' %}" method="post" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-light btn-sm">Вийти</button>
+        </form>
+        {% else %}
+        <a href="{% url 'accounts:login' %}" class="btn btn-outline-light btn-sm me-2">Увійти</a>
+        <a href="{% url 'accounts:signup' %}" class="btn btn-primary btn-sm">Реєстрація</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid flex-grow-1">
+    <div class="row min-vh-100">
+
+      <aside class="col-md-3 col-lg-2 bg-white shadow-sm p-3">
+        <div class="sticky-top" style="top: 20px; z-index: 100;">
+          <div class="nav nav-pills flex-column gap-2">
+            <a href="{% url 'vehicles:search' %}"
+              class="nav-link text-start {% if request.resolver_match.url_name == 'search' %}active{% else %}text-dark bg-light{% endif %}">
+              <i class="bi bi-search me-2"></i>Пошук авто
+            </a>
+
+            {% if user.is_authenticated and user.is_staff %}
+            <a href="{% url 'vehicles:create' %}"
+              class="nav-link text-start btn btn-outline-success {% if request.resolver_match.url_name == 'create' %}active text-white{% endif %}">
+              <i class="bi bi-plus-circle me-2"></i>Додати авто
+            </a>
+
+            <a href="{% url 'accounts:user_list' %}"
+              class="nav-link text-start btn btn-outline-info {% if request.resolver_match.url_name == 'user_list' %}active text-white{% endif %}">
+              <i class="bi bi-people me-2"></i>Користувачі
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </aside>
+
+      <main class="col-md-9 col-lg-10 p-4">
+        {% block content %}{% endblock %}
+      </main>
+
+    </div>
+  </div>
+
+  <footer class="bg-dark text-white text-center py-3 mt-auto">
+    <div class="container">
+      <small>&copy; 2026 Auto Numbers Search</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+
+</html>

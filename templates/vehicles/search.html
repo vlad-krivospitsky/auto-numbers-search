@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}База пошуку авто{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mb-4">
+    <div class="col-md-8 text-center">
+        <h1 class="display-6 fw-bold mb-3">Пошук автомобіля за номером</h1>
+        <p class="text-muted">🚗 Введіть номер автомобіля для пошуку</p>
+        <p class="text-muted">Почніть вводити літери або цифри держ. номера в форматі: AA1234BB</p>
+
+        <div class="position-relative">
+            <input type="text" name="q" class="form-control form-control-lg text-center fw-bold shadow-sm"
+                value="{{ query }}" hx-get="{% url 'vehicles:search' %}" hx-trigger="keyup changed delay:300ms, search"
+                hx-target="#search-results" hx-indicator="#search-spinner" autocomplete="off" autofocus>
+
+            <div id="search-spinner" class="htmx-indicator position-absolute top-50 end-0 translate-middle-y me-3">
+                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                    <span class="visually-hidden">Завантаження...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="search-results">
+    {% include 'vehicles/partials/vehicle_list.html' %}
+</div>
+{% endblock %}

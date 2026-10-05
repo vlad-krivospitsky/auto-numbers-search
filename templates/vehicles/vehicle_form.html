@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% if object %}Редагування авто: {{ object.license_plate }}{% else %}Додавання нового авто{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow-sm">
+      <div class="card-header bg-white py-3">
+        <h2 class="h4 mb-0 fw-bold">
+          {% if object %}
+          ✏️ Редагування автомобіля <span class="badge bg-warning text-dark border border-dark font-monospace me-2">{{ object.license_plate }}</span>
+          {% else %}
+          ➕ Додавання нового автомобіля
+          {% endif %}
+        </h2>
+      </div>
+      <div class="card-body p-4">
+        <form method="post" novalidate>
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+          <div class="alert alert-danger">
+            {% for error in form.non_field_errors %}
+            <p class="mb-0">{{ error }}</p>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="{{ form.license_plate.id_for_label }}" class="form-label fw-bold">Держ. номер *</label>
+              {{ form.license_plate }}
+              {% if form.license_plate.errors %}
+              <div class="text-danger small mt-1">{{ form.license_plate.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6">
+              <label for="{{ form.region.id_for_label }}" class="form-label fw-bold">Регіон *</label>
+              {{ form.region }}
+              {% if form.region.errors %}
+              <div class="text-danger small mt-1">{{ form.region.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6">
+              <label for="{{ form.vendor.id_for_label }}" class="form-label fw-bold">Марка (Vendor) *</label>
+              {{ form.vendor }}
+              {% if form.vendor.errors %}
+              <div class="text-danger small mt-1">{{ form.vendor.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6">
+              <label for="{{ form.model.id_for_label }}" class="form-label fw-bold">Модель *</label>
+              {{ form.model }}
+              {% if form.model.errors %}
+              <div class="text-danger small mt-1">{{ form.model.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-4">
+              <label for="{{ form.year_from.id_for_label }}" class="form-label fw-bold">Рік випуску *</label>
+              {{ form.year_from }}
+              {% if form.year_from.errors %}
+              <div class="text-danger small mt-1">{{ form.year_from.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-4">
+              <label for="{{ form.fuel.id_for_label }}" class="form-label fw-bold">Тип пального *</label>
+              {{ form.fuel }}
+              {% if form.fuel.errors %}
+              <div class="text-danger small mt-1">{{ form.fuel.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-4">
+              <label for="{{ form.engine_volume.id_for_label }}" class="form-label fw-bold">Об'єм двигуна (л)</label>
+              {{ form.engine_volume }}
+              {% if form.engine_volume.errors %}
+              <div class="text-danger small mt-1">{{ form.engine_volume.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6">
+              <label for="{{ form.color.id_for_label }}" class="form-label fw-bold">Колір *</label>
+              {{ form.color }}
+              {% if form.color.errors %}
+              <div class="text-danger small mt-1">{{ form.color.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6">
+              <label for="{{ form.body_type.id_for_label }}" class="form-label fw-bold">Тип кузова *</label>
+              {{ form.body_type }}
+              {% if form.body_type.errors %}
+              <div class="text-danger small mt-1">{{ form.body_type.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6">
+              <label for="{{ form.registration_date.id_for_label }}" class="form-label fw-bold">Дата реєстрації
+                *</label>
+              {{ form.registration_date }}
+              {% if form.registration_date.errors %}
+              <div class="text-danger small mt-1">{{ form.registration_date.errors.0 }}</div>
+              {% endif %}
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+              {% if object %}
+              <a href="{% url 'vehicles:detail' object.pk %}" class="btn btn-outline-secondary">Скасувати</a>
+              {% else %}
+              <a href="{% url 'vehicles:search' %}" class="btn btn-outline-secondary">Скасувати</a>
+              {% endif %}
+              <button type="submit" class="btn btn-primary px-4">
+                {% if object %}Зберегти зміни{% else %}Додати авто{% endif %}
+              </button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 240" width="100%" height="100%">
+  <defs>
+    <!-- Тень всей композиции -->
+    <filter id="drop-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="3" dy="5" stdDeviation="4" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+
+    <!-- Тень линзы -->
+    <filter id="lens-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="4" dy="6" stdDeviation="5" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+
+    <!-- Пиксельное размытие (цензура номера) -->
+    <filter id="pixelate-censorship" x="0%" y="0%" width="100%" height="100%">
+      <feGaussianBlur stdDeviation="2.2" />
+      <feComponentTransfer>
+        <feFuncR type="discrete" tableValues="0 0.25 0.5 0.75 1"/>
+        <feFuncG type="discrete" tableValues="0 0.25 0.5 0.75 1"/>
+        <feFuncB type="discrete" tableValues="0 0.25 0.5 0.75 1"/>
+      </feComponentTransfer>
+      <feMorphology operator="dilate" radius="1.2"/>
+    </filter>
+
+    <!-- Градиент Хрома -->
+    <linearGradient id="chrome-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="25%" stop-color="#E0E0E0"/>
+      <stop offset="50%" stop-color="#7C7C80"/>
+      <stop offset="75%" stop-color="#D1D1D6"/>
+      <stop offset="100%" stop-color="#48484A"/>
+    </linearGradient>
+
+    <!-- Градиент объемной ручки -->
+    <linearGradient id="handle-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3A3A3C"/>
+      <stop offset="35%" stop-color="#1C1C1E"/>
+      <stop offset="70%" stop-color="#2C2C2E"/>
+      <stop offset="100%" stop-color="#111111"/>
+    </linearGradient>
+
+    <!-- Блик на стекле -->
+    <linearGradient id="glass-specular" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6"/>
+      <stop offset="30%" stop-color="#FFFFFF" stop-opacity="0.1"/>
+      <stop offset="70%" stop-color="#0057B7" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.25"/>
+    </linearGradient>
+  </defs>
+
+  <g id="logo-centered" transform="translate(15, 0)">
+    
+    <!-- ================= 1. АВТОМОБИЛЬНЫЙ НОМЕР ================= -->
+    <g id="license-plate" filter="url(#drop-shadow)">
+      <rect x="50" y="81" width="390" height="78" rx="10" fill="#F8F9FA" stroke="#1C1C1E" stroke-width="3.5"/>
+      <rect x="53" y="84" width="384" height="72" rx="8" fill="none" stroke="#E5E5EA" stroke-width="1.5"/>
+      
+      <!-- Синяя секция -->
+      <path d="M 50,91 A 10,10 0 0,1 60,81 L 92,81 L 92,159 L 60,159 A 10,10 0 0,1 50,149 Z" fill="#0057B7"/>
+      <rect x="61" y="91" width="20" height="6" fill="#0057B7"/>
+      <rect x="61" y="97" width="20" height="6" fill="#FFD700"/>
+      <text x="71" y="122" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="13" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">UA</text>
+      
+      <!-- Размытая серия и номер -->
+      <g filter="url(#pixelate-censorship)">
+        <text x="262" y="135" font-family="'Courier New', monospace, sans-serif" font-weight="900" font-size="40" fill="#111111" letter-spacing="3" text-anchor="middle">
+          AA 1234 BB
+        </text>
+      </g>
+    </g>
+
+    <!-- ================= 2. ЛУПА С ИДЕАЛЬНОЙ ОСЬЮ РУЧКИ ================= -->
+    <g id="magnifying-glass" filter="url(#lens-shadow)">
+
+      <!-- ЛИНЗА И МЕТАЛЛИЧЕСКИЙ ОБОД (Центр: X=72, Y=112) -->
+      <g id="magnifying-glass-rim">
+        <!-- Металлический обод -->
+        <circle cx="72" cy="112" r="51" fill="none" stroke="url(#chrome-gradient)" stroke-width="7"/>
+        <circle cx="72" cy="112" r="54.5" fill="none" stroke="#2C2C2E" stroke-width="0.8"/>
+        <circle cx="72" cy="112" r="47.5" fill="none" stroke="#1C1C1E" stroke-width="0.8"/>
+
+        <!-- Синий фон внутри -->
+        <circle cx="72" cy="112" r="47" fill="#0057B7"/>
+
+        <!-- Флаг и UA -->
+        <g id="magnified-content">
+          <rect x="37" y="78" width="70" height="16" fill="#0057B7" stroke="#FFFFFF" stroke-width="0.5"/>
+          <rect x="37" y="94" width="70" height="16" fill="#FFD700" stroke="#FFFFFF" stroke-width="0.5"/>
+          <text x="72" y="144" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="38" fill="#FFFFFF" text-anchor="middle" letter-spacing="2">UA</text>
+        </g>
+
+        <!-- Блики на стекле -->
+        <circle cx="72" cy="112" r="47" fill="url(#glass-specular)"/>
+        <path d="M 37,93 A 42,42 0 0,1 107,93 A 46,46 0 0,0 37,93 Z" fill="#FFFFFF" opacity="0.45"/>
+      </g>
+
+      <!-- ЕДИНАЯ РУЧКА С КРЕПЛЕНИЕМ (Вращение целиком из центра линзы 72, 112 на 135 градусов) -->
+      <g id="magnifying-glass-handle-assembly" transform="translate(72, 112) rotate(135)">
+        <!-- Втулка/крепление (стыкуется ровно к внешнему радиусу 54.5) -->
+        <rect x="-7" y="52" width="14" height="12" rx="2" fill="url(#chrome-gradient)" stroke="#2C2C2E" stroke-width="0.5"/>
+        <line x1="-6" y1="58" x2="6" y2="58" stroke="#3A3A3C" stroke-width="1"/>
+
+        <!-- Черная рукоять -->
+        <rect x="-6" y="63" width="12" height="65" rx="6" fill="url(#handle-gradient)"/>
+        
+        <!-- Насечки на рукояти -->
+        <line x1="-5" y1="78" x2="5" y2="78" stroke="#48484A" stroke-width="1"/>
+        <line x1="-5" y1="83" x2="5" y2="83" stroke="#48484A" stroke-width="1"/>
+        <line x1="-5" y1="88" x2="5" y2="88" stroke="#48484A" stroke-width="1"/>
+        
+        <!-- Набалдашник на конце -->
+        <circle cx="0" cy="128" r="6" fill="url(#chrome-gradient)"/>
+      </g>
+
+    </g>
+  </g>
+</svg>

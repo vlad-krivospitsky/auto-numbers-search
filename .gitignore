@@ -11,7 +11,6 @@ env/
 ENV/
 db.sqlite3
 *.log
-/static/
 /media/
 /staticfiles/
 .idea/

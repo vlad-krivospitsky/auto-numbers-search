@@ -21,8 +21,8 @@ services:
       - key: WEB_CONCURRENCY
         value: 4
       - key: DEBUG
-        value: "False"
+        value: "True"
       - key: ALLOWED_HOSTS
-        value: ".onrender.com"
+        value: "*"
       - key: CAR_IMAGES_API_KEY
         value: "ci_869a50589857f70dd29c4661ab30554e6f014cf37dbd4a194c9a0bc6"

@@ -2,11 +2,13 @@ databases:
   - name: autonumbers-db
     databaseName: autonumbers
     user: autonumbers_user
+    plan: free
 
 services:
   - type: web
     name: auto-numbers-search
     env: python
+    plan: free
     buildCommand: "./build.sh"
     startCommand: "gunicorn config.wsgi:application"
     envVars:

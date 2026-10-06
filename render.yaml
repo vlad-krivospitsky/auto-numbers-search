@@ -1,0 +1,26 @@
+databases:
+  - name: autonumbers-db
+    databaseName: autonumbers
+    user: autonumbers_user
+
+services:
+  - type: web
+    name: auto-numbers-search
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn config.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: autonumbers-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
+      - key: CAR_IMAGES_API_KEY
+        value: "ci_869a50589857f70dd29c4661ab30554e6f014cf37dbd4a194c9a0bc6"

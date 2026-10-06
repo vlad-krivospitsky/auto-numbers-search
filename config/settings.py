@@ -26,7 +26,7 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="127.0.0.1,localhost", cast=Csv())
 
-CAR_IMAGES_API_KEY = config("CAR_IMAGES_API_KEY", default="")
+CAR_IMAGES_API_KEY = config("CAR_IMAGES_API_KEY", default="ci_869a50589857f70dd29c4661ab30554e6f014cf37dbd4a194c9a0bc6")
 
 # Application definition
 

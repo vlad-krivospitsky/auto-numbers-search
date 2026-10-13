@@ -31,3 +31,43 @@ class AccountsRegistrationTests(TestCase):
         response = self.client.post(reverse("accounts:signup"), data)
         self.assertEqual(response.status_code, 200)
         self.assertFalse(User.objects.filter(username="user3char").exists())
+
+
+class StaffAccessTests(TestCase):
+    def setUp(self):
+        self.staff_user = User.objects.create_user(
+            username="staffuser",
+            email="staff@example.com",
+            password="password123",
+            is_staff=True,
+        )
+        self.regular_user = User.objects.create_user(
+            username="regularuser",
+            email="regular@example.com",
+            password="password123",
+            is_staff=False,
+        )
+
+    def test_unauthenticated_cannot_access_user_list(self):
+        response = self.client.get(reverse("accounts:user_list"))
+        self.assertEqual(response.status_code, 403)
+
+    def test_regular_user_cannot_access_user_list(self):
+        self.client.login(username="regularuser", password="password123")
+        response = self.client.get(reverse("accounts:user_list"))
+        self.assertEqual(response.status_code, 403)
+
+    def test_staff_user_can_access_user_list(self):
+        self.client.login(username="staffuser", password="password123")
+        response = self.client.get(reverse("accounts:user_list"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_staff_user_can_toggle_admin_role(self):
+        self.client.login(username="staffuser", password="password123")
+        response = self.client.post(
+            reverse("accounts:toggle_admin", kwargs={"user_id": self.regular_user.id})
+        )
+        self.assertRedirects(response, reverse("accounts:user_list"))
+        self.regular_user.refresh_from_db()
+        self.assertTrue(self.regular_user.is_staff)
+

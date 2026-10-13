@@ -1,8 +1,9 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.db.models import Q
+from apps.accounts.mixins import StaffRequiredMixin
 from .models import Vehicle
 from .forms import VehicleForm
 
@@ -19,13 +20,6 @@ def normalize_search_query(query_str: str) -> tuple[str, str]:
     cyr = "".join(LATIN_TO_CYRILLIC.get(ch, ch) for ch in query_str)
     lat = "".join(CYRILLIC_TO_LATIN.get(ch, ch) for ch in query_str)
     return cyr, lat
-
-
-class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
-    raise_exception = True
-
-    def test_func(self) -> bool:
-        return self.request.user.is_staff
 
 
 class VehicleSearchView(LoginRequiredMixin, ListView):

@@ -1,9 +1,9 @@
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import CreateView, ListView, View
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from .forms import CustomUserCreationForm
+from .mixins import StaffRequiredMixin
 from .models import User
 
 
@@ -21,14 +21,10 @@ class CustomLogoutView(LogoutView):
     next_page = reverse_lazy("vehicles:search")
 
 
-class UserManagementView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+class UserManagementView(StaffRequiredMixin, ListView):
     model = User
     template_name = "accounts/user_list.html"
     context_object_name = "users"
-    raise_exception = True
-
-    def test_func(self) -> bool:
-        return self.request.user.is_staff
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -36,11 +32,7 @@ class UserManagementView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return context
 
 
-class ToggleAdminRoleView(LoginRequiredMixin, UserPassesTestMixin, View):
-    raise_exception = True
-
-    def test_func(self) -> bool:
-        return self.request.user.is_staff
+class ToggleAdminRoleView(StaffRequiredMixin, View):
 
     def post(self, request, user_id: int):
         user_to_change = get_object_or_404(User, pk=user_id)
